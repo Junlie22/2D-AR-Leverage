@@ -13,7 +13,7 @@ clear all;
 addpath(genpath('Function'))
 addpath(genpath('tensor_toolbox_2.5'))
 
-%FileName        = {'Airport', 'San_Diego'};
+%FileName        = {'../dataset/Airport', '../dataset/San_Diego'};
 FileName        = {'p011_neutral','p011_smile','p015_neutral'};
 
 LARTVAD_K       = 80; % the number of superpixels
