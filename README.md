@@ -33,7 +33,7 @@ For the anomaly detection task in Section 6.1,
 
 For the facial skin analysis in Section 6.2,
 
-* first, request and download Hyper-Skin 2023 Data (.mat files as follows) from the link [https://github.com/hyperspectral-skin/Hyper-Skin-2023](https://github.com/hyperspectral-skin/Hyper-Skin-2023) and store them in the `dataset/` path;
+* first, request and download Hyper-Skin 2023 Data (.mat and .jpg files as follows) from the link [https://github.com/hyperspectral-skin/Hyper-Skin-2023](https://github.com/hyperspectral-skin/Hyper-Skin-2023) and store them in the `dataset/` path;
 
 ```python
 "dataset/Hyper-skin/NIR/p011_neutral_right.mat"
