@@ -244,7 +244,7 @@ def tensor_vec_multiply(A, b):
     return res
 
 
-def two_dim_param_estimate_leverage(XX, X, lev_score = [], subsample_size = 0):
+def two_dim_param_estimate_leverage(XX, X, lev_score = [], subsample_size = 0, return_XX_sub = False):
     if(subsample_size == 0 or len(lev_score) == 0):
         A = tensor_multiply(XX,XX)
         b = tensor_multiply(XX,X)
@@ -259,6 +259,8 @@ def two_dim_param_estimate_leverage(XX, X, lev_score = [], subsample_size = 0):
         X_sub = X[i,j]
         A = XX_sub.T @ XX_sub
         b = XX_sub.T @ X_sub
+        if(return_XX_sub):
+            return np.linalg.solve(A, b), XX_sub
         return np.linalg.solve(A, b)
     
 
@@ -502,3 +504,66 @@ def fast_2d_AR_leverage_score(image, order=[1,1], subsample_size = 1000):
 
     lev[p:-p,q:-q] = lev_temp
     return lev
+
+
+def AIC(size, para_num, err_var, dist = 'normal'):
+    if(dist == 'normal'):
+        aic = para_num * 2 + size * np.log(err_var)
+        return aic
+    
+
+def BIC(size, para_num, err_var, dist = 'normal'):
+    if(dist == 'normal'):
+        bic = para_num * np.log(size) + size * np.log(err_var)
+        return bic
+    
+
+def beta_to_phi(beta, order):
+    [p,q] = order
+    phi = np.zeros(p*q+p+q)
+    for i in range(p+1):
+        for j in range(q+1):
+            if((i==p) and (j==q)): continue
+            i_inv = p-i
+            j_inv = q-j
+            a = np.max([i_inv,j_inv])
+            phi[a**2 - 1 + j_inv + a - i_inv] = beta[i,j]
+    return phi
+
+
+def causal_fast_order_selection(image, order=[2,2], subsample_size = 1000):
+    p = order[0]
+    q = order[1]
+    [m,n] = image.shape
+
+    lev_temp = np.zeros([m-p,n-q])
+    lev_list = []
+    cov_loc = causal_get_cov_loc(order)
+    XX = np.zeros([(m-p), (n-q),len(cov_loc)])
+    i = 0
+    for loc in cov_loc:
+        k = loc[0]
+        l = loc[1]
+        XX[:,:,i] = image[(p+k):(m+k), (q+l):(n+l)]
+        i = i + 1
+    
+    start_time = time.time()
+    lev_temp = XX[:,:,0]**2 / np.sum(XX[:,:,0]**2)
+    lev_list.append(lev_temp)
+    phi = np.sum(XX[:,:,0] * XX[:,:,1]) / np.sum(XX[:,:,0]**2)
+    residual = XX[:,:,1] - XX[:,:,0] * phi
+    lev_temp = lev_temp + residual**2 / np.sum(residual**2)
+    lev_list.append(lev_temp)
+    time_fast = time.time() - start_time
+
+    for s in range(2,len(cov_loc)):
+        start_time = time.time()
+        phi = two_dim_param_estimate_leverage(XX[:,:,:s], XX[:,:,s], lev_score = lev_temp, subsample_size = subsample_size)
+        time_fast = time_fast + time.time() - start_time
+        residual = XX[:,:,s] - tensor_vec_multiply(XX[:,:,:s], phi)
+        start_time = time.time()
+        lev_temp = lev_temp + residual**2 / np.sum(residual**2)
+        lev_list.append(lev_temp)
+        time_fast = time_fast + time.time() - start_time
+
+    return lev_list
