@@ -18,8 +18,8 @@ A brief introduction about the folders and files:
 * `simulation_parallel.ipynb`: parallel version of `simulation.ipynb`, designed for to improve the running efficiency during repeated experiments;
 * `anomaly detection.ipynb`: comparison of LEV-exact, LEV-appr, RX and LARTVAD on anomaly detection tasks;
 * `Hyper skin.ipynb`: comparison of LEV-exact, LEV-appr, RX and LARTVAD on facial skin analysis using hyper-skin dataset;
-* `order selection.ipynb`: comparison of UNIF, OLS, LEV-exact, LEV-appr for order selection and parameter estimation when the true order is unknown;
-* `hypothesis test.ipynb`: comparison of UNIF, OLS, LEV-exact, LEV-appr for hypothesis test.
+* `order selection.ipynb`: comparison of UNIF, OLS, LEV-exact, LEV-appr on order selection and parameter estimation when the true order is unknown;
+* `hypothesis test.ipynb`: comparison of UNIF, OLS, LEV-exact, LEV-appr on hypothesis test.
 
 ## Reproducibility
 
