@@ -46,5 +46,10 @@ For the facial skin analysis in Section 6.2,
 
 * then, run `Hyper skin.ipynb` to reproduce the result in Figure 7.
 
+For Order Selection in Supplementary Materials,
 
+* you can run `order selection.ipynb` to reproduce results in Figure.9 and Figure.10.
 
+For Hypothesis Test in Supplementary Materials,
+
+* you can run `hypothesis test.ipynb` to reproduce results in Figure.11~15.
